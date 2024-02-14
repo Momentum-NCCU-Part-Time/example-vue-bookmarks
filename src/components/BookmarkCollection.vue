@@ -25,7 +25,7 @@ getBookmarks().then((data) => {
 
 const addUpdatedBookmarkToCollection = (updatedBookmark) => {
   collection.value = collection.value.map((bookmark) => {
-    if (bookmark.id === updatedBookmark.id) {
+    if (bookmark._id === updatedBookmark._id) {
       return updatedBookmark
     }
     return bookmark
@@ -37,7 +37,7 @@ const addBookmarkToCollection = (bookmark) => {
 }
 
 const removeDeletedBookmarkFromCollection = (bookmarkId) => {
-  collection.value = collection.value.filter((bookmark) => bookmark.id !== bookmarkId)
+  collection.value = collection.value.filter((bookmark) => bookmark._id !== bookmarkId)
 }
 </script>
 

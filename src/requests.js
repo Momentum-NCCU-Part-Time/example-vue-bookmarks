@@ -23,13 +23,13 @@ export const createBookmark = async (bookmark) => {
 }
 
 export const updateBookmark = async (bookmark) => {
-  const { id, title } = bookmark
-  const res = await fetch(`${apiBaseURL}/${id}`, {
+  const { _id, title } = bookmark
+  const res = await fetch(`${apiBaseURL}/${_id}`, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ title })
+    body: JSON.stringify({ title }),
   })
   if (res.ok) {
     return res.json()
@@ -40,7 +40,8 @@ export const updateBookmark = async (bookmark) => {
 
 export const deleteBookmark = async (id) => {
   const res = await fetch(`${apiBaseURL}/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
-  return res.json()
+  // the API does not return any JSON data for DELETE requests
+  return res
 }

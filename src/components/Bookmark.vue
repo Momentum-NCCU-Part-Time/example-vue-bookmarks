@@ -18,7 +18,7 @@
         <div v-else>
           <div class="text-2xl bookmark-title">{{ bookmark.title }}</div>
           <div class="text-xs text-gray-600 bookmark-body">{{ bookmark.body }}</div>
-          <FormattedDate :date="bookmark.createdAt" class="mt-2"/>
+          <FormattedDate v-if="bookmark.updatedAt" :date="bookmark.updatedAt" class="mt-2"/>
         </div>
 
       </div>
@@ -26,7 +26,7 @@
         v-if="confirmDelete"
         class="flex items-center px-4 text-xs text-gray-600 uppercase border-gray-300 button-group"
       >
-        <button @click="removeBookmark(bookmark.id)" class="px-4 font-semibold uppercase text-rose-600">
+        <button @click="removeBookmark(bookmark._id)" class="px-4 font-semibold uppercase text-rose-600">
           Confirm delete
         </button>
         <button @click="confirmDelete = false" class="px-4 uppercase text-zinc-600">Cancel</button>
@@ -36,7 +36,7 @@
         class="flex items-center px-4 text-xs text-gray-600 uppercase border-gray-300 button-group"
       >
         <button
-          @click="() => saveBookmark(bookmark.id)"
+          @click="() => saveBookmark(bookmark._id)"
           class="px-4 font-semibold uppercase text-emerald-500"
         >
           Save
@@ -68,9 +68,8 @@ const newBookmarkTitle = ref(props.bookmark.title)
 const confirmDelete = ref(false)
 
 const saveBookmark = (bookmarkId) => {
-  console.log('saveBookmark', bookmarkId)
   if (!newBookmarkTitle.value) return
-  updateBookmark({ id: bookmarkId, title: newBookmarkTitle.value }).then(
+  updateBookmark({ _id: bookmarkId, title: newBookmarkTitle.value }).then(
     (res) => {
       if (res.error) {
         console.error(res.error)
@@ -88,9 +87,13 @@ const initiateDelete = () => {
 }
 
 const removeBookmark = (bookmarkId) => {
-  // TODO: add confirmation dialog
-  deleteBookmark(bookmarkId).then(() => {
+  deleteBookmark(bookmarkId).then((res) => {
+  if (res.ok) {
+    console.log("Bookmark deleted")
     emit('bookmarkDeleted', bookmarkId)
+  } else {
+      console.error(res.error)
+  }
   })
 }
 </script>
